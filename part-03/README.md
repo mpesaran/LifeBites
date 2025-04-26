@@ -1,8 +1,7 @@
-![H(olberton)BnB](https://github.com/mpesaran/hbnb/blob/786d6e184ef8ff367ba04ce2356f6f77e210fe9c/hbnb.png)
 # HBnB
 hbnb is a web application that replicates the functionality of Airbnb, allowing users to manage and book various accommodations. This project is built using Flask and follows RESTful API principles.
 
-## 🌀  Features  🌀
+## Features
 
 - User registration and authentication
 - Create, retrieve, update, and delete users
@@ -10,7 +9,7 @@ hbnb is a web application that replicates the functionality of Airbnb, allowing 
 - Input validation and error handling
 - Well-documented API using Flask-RESTx
 
-### 🗃️  Directories and Files:  🗃️
+### Directories and Files:
 
 - **app/**: Contains the core application code.
   - **`__init__.py`**: Initializes the application package.
@@ -46,20 +45,7 @@ hbnb is a web application that replicates the functionality of Airbnb, allowing 
   
 - **README.md**: This file contains a brief overview of the project and instructions.
 
-## 👫 Relationships 👫
-Relationships between the `User`, `Place`, `Review` and `Amentiy` classes reflect the connections between the real-world concepts represented by each entity.
-
-![ER Diagram](https://github.com/mpesaran/hbnb/blob/6008810a94ee006ac6dbb77c4e3d9b7a3d6cb762/part-03/ERD%20holberton%20part%203.png)
-
-### **One-to-Many**
-- 👥🏘️ **User and Place** : A `User` can create many `Places`, but each `Place` is associated with only one `User`.
-- 🏘️🗒️ **Place and Review** : A `Place` can have many `Reviews`, but each `Review` is associated with only one `Place`.
-- 👥🗒️ **User and Review** : A `User` can create many `Reviews`, but each `Review` is written by one `User`.
-
-### **Many-to-Many** 
-- 🏘️🚽 **Place and Amenities** : A `Place` can have many `Amenities`, and an `Amenity` can be associated with many `Places`.
-
-## 🖥️  Installation  🖥️
+## Installation
 
 To install the necessary dependencies, run:
 
@@ -68,30 +54,30 @@ pip install -r requirements.txt
 python run.py
 
 ```
-## 🏭  API Endpoints  🏭
+## API Endpoints
 
-### 👥  User Routes 
+### User Routes
 
 - `POST /api/v1/users/` - Register a new user
 - `GET /api/v1/users/` - Retrieve a list of users
 - `GET /api/v1/users/<user_id>` - Get user details by ID
 - `PUT /api/v1/users/<user_id>` - Update user details
 
-### 🏘️  Place Routes 
+### Place Routes
 
 - `POST /api/v1/places/` - Create a new place
 
 
-### 🗒️  Review Routes 
+### Review Routes
 
 - `POST /api/v1/reviews/` - Create a new review
 
 
-### 🚽  Amenity Routes 
+### Amenity Routes
 
 - `POST /api/v1/amenities/` - Create a new amenity
 
-## 🧪  Running Tests  🧪
+## Running Tests
 
 To run the tests, use the following command:
  ```bash

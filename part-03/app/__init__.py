@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-
+from flask_cors import CORS
 
 db = SQLAlchemy()
 
@@ -10,6 +10,7 @@ def create_app(config_class="config.DevelopmentConfig"):
     """ method used to create an app instance """
     app = Flask(__name__)
 
+    CORS(app, resources={r"/api/v1/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
     # Load configuration from the specified config class
     app.config.from_object(config_class)
 

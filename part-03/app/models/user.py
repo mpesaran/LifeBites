@@ -61,6 +61,10 @@ class User(db.Model):
     def verify_password(self, password):
         """Verifies if the provided password matches the hashed password."""
         return bcrypt.check_password_hash(self.password, password)
+    
+    def check_password(self, password):
+        """Checks the password against the stored hash."""
+        return bcrypt.check_password_hash(self.password, password)
 
 
     # --- Methods ---

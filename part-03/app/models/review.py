@@ -42,7 +42,7 @@ class Review(db.Model):
     @validates('rating')
     def validate_rating(self, key, value):
         """Ensure rating is between 1 and 5"""
-        if not (1 <= value <= 5):
+        if not (1 <= int(value) <= 5):
             raise ValueError("Rating must be an integer between 1 and 5")
         return value
 

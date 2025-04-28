@@ -102,6 +102,9 @@ class PlaceList(Resource):
             })
 
         return output, 200
+    @api.response(200, 'optoins handled')
+    def options(self):
+        return {}, 200
 
 @api.route('/<place_id>')
 class PlaceResource(Resource):
@@ -114,30 +117,42 @@ class PlaceResource(Resource):
         if not place:
             return {'error': 'Place not found'}, 404
 
-        owner = place.owner
+        owner = place.owner_r
         if not owner:
             return {'error': 'Place owner not found'}, 404
 
-        amenities_list = []
-        for amenity in place.amenities:
-            amenities_list.append({
-                'id': str(amenity.id),
-                'name': amenity.name
-            })
-
+        amenities = [amenity.name for amenity in place.amenities_r]
+        # for amenity in place.amenities:
+        #     amenities_list.append({
+        #         'id': str(amenity.id),
+        #         'name': amenity.name
+        #     })
+        reviews = [{
+            "id": str(review.id),
+            "text": review.text,
+            "rating": review.rating,
+            "user": {
+                "id": review.user_r.id,
+                "first_name": review.user_r.first_name,
+                "last_name": review.user_r.last_name
+            }
+        } for review in place.reviews_r]
+    
         output = {
-            'id': str(place.id),
-            'title': place.title,
-            'description': place.description,
-            'latitude': place.latitude,
-            'longitude': place.longitude,
-            'owner': {
-                'id': str(owner.id),
-                'first_name': owner.first_name,
-                'last_name': owner.last_name,
-                'email': owner.email
+            "id": str(place.id),
+            "title": place.title,
+            "description": place.description,
+            "price": place.price,
+            "latitude": place.latitude,
+            "longitude": place.longitude,
+            "owner": {
+                "id": str(owner.id),
+                "first_name": owner.first_name,
+                "last_name": owner.last_name,
+                "email": owner.email
             },
-            'amenities': amenities_list
+            "amenities": amenities,
+            "reviews": reviews
         }
 
         return output, 200

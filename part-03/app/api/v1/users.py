@@ -1,6 +1,8 @@
 from flask_restx import Namespace, Resource, fields
 # from app.services.facade import HBnBFacade
 from app.services import facade
+from werkzeug.security import check_password_hash
+
 
 api = Namespace('users', description='User operations')
 
@@ -60,6 +62,9 @@ class UserList(Resource):
             })
 
         return output, 200
+    @api.response(200, 'optoins handled')
+    def options(self):
+        return {}, 200
 
 @api.route('/<user_id>')
 class UserResource(Resource):
@@ -110,3 +115,33 @@ class UserResource(Resource):
 
         facade.delete_user(user_id)
         return {'message': 'User deleted successfully'}, 200
+    
+@api.route('/login')
+class LoginResource(Resource):
+    @api.expect(api.model('Login', {
+        'email': fields.String(required=True),
+        'password': fields.String(required=True)
+    }))
+    @api.response(200, 'Logged in successfully')
+    @api.response(401, 'Invalid credentials')
+    def post(self):
+        """Login a user by email and password"""
+        data = api.payload
+        email = data.get('email')
+        password = data.get('password')
+
+        user = facade.get_user_by_email(email)  # you'll need to implement this if you don't have it
+
+        if not user or not user.check_password(password):
+            return {'error': 'Invalid email or password'}, 401
+
+        return {
+            'id': str(user.id),
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email
+        }, 200
+
+    @api.response(200, 'optoins handled')
+    def options(self):
+        return {}, 200

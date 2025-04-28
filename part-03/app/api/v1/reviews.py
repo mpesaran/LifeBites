@@ -65,6 +65,9 @@ class ReviewList(Resource):
             })
 
         return output, 200
+    @api.response(200, 'optoins handled')
+    def options(self):
+        return {}, 200
 
 @api.route('/<review_id>')
 class ReviewResource(Resource):

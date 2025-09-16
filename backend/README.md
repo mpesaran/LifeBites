@@ -83,9 +83,3 @@ To run the tests, use the following command:
  ```bash
  pytest filename
  ```
-
-## Contributors
-- [Anna Ly](https://github.com/aavly)
-- [Crystal Carroll](https://github.com/Crystal-holberton)
-- [John Nkpolukwu](https://github.com/Johnnsonkp)
-- [Mahsa Pesaran](https://github.com/mpesaran)

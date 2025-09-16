@@ -1,8 +1,9 @@
 from app import db
 from app.models.user import User
-from app.models.amenity import Amenity
-from app.models.place import Place
+from app.models.skill import Skill
+from app.models.skill_session import SkillSession
 from app.models.review import Review
+from app.models.booking import Booking
 from abc import ABC, abstractmethod
 
 class Repository(ABC):
@@ -60,3 +61,7 @@ class SQLAlchemyRepository(Repository):
 
     def get_by_attribute(self, attr_name, attr_value):
         return self.model.query.filter(getattr(self.model, attr_name) == attr_value).first()
+
+    def get_all_by_attribute(self, attr_name, attr_value):
+        """Get all objects matching a specific attribute value"""
+        return self.model.query.filter(getattr(self.model, attr_name) == attr_value).all()

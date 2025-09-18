@@ -7,3 +7,4 @@ flask-migrate
 pymysql
 cryptography
 flask-cors
+PyJWT

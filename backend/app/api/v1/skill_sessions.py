@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from app.utils.jwt_auth import jwt_required, instructor_required
 
 api = Namespace('skill-sessions', description='Skill Session operations')
 
@@ -50,13 +51,20 @@ class SkillSessionList(Resource):
     @api.expect(skill_session_model)
     @api.response(201, 'Skill session successfully created')
     @api.response(400, 'Invalid input data')
+    @api.response(401, 'Authentication required')
+    @api.response(403, 'Instructor privileges required')
     @api.response(404, 'Instructor not found')
-    def post(self):
+    @jwt_required
+    @instructor_required
+    def post(self, current_user):
         """Create a new skill session"""
         session_data = api.payload
 
+        # Set instructor_id from authenticated user
+        session_data['instructor_id'] = current_user.id
+
         # Validate required fields
-        required_fields = ['title', 'description', 'price', 'duration', 'instructor_id']
+        required_fields = ['title', 'description', 'price', 'duration']
         if not all(field in session_data for field in required_fields):
             return {'error': 'Missing required fields'}, 400
 

@@ -1,6 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
 from datetime import datetime
+from app.utils.jwt_auth import jwt_required
 
 api = Namespace('bookings', description='Booking operations')
 
@@ -24,13 +25,18 @@ class BookingList(Resource):
     @api.expect(booking_model)
     @api.response(201, 'Booking successfully created')
     @api.response(400, 'Invalid input data or booking validation failed')
+    @api.response(401, 'Authentication required')
     @api.response(404, 'Session not found')
-    def post(self):
+    @jwt_required
+    def post(self, current_user):
         """Create a new booking"""
         booking_data = api.payload
 
+        # Set user_id from authenticated user
+        booking_data['user_id'] = current_user.id
+
         # Validate required fields
-        required_fields = ['user_id', 'session_id', 'booking_date']
+        required_fields = ['session_id', 'booking_date']
         if not all(field in booking_data for field in required_fields):
             return {'error': 'Missing required fields'}, 400
 

@@ -27,12 +27,14 @@ def create_app(config_class="config.DevelopmentConfig"):
     from app.api.v1.skill_sessions import api as skill_sessions_ns
     from app.api.v1.bookings import api as bookings_ns
     from app.api.v1.reviews import api as reviews_ns
+    from app.api.v1.auth import api as auth_ns
     # Register the namespaces
     api.add_namespace(users_ns, path='/api/v1/users')
     api.add_namespace(skills_ns, path='/api/v1/skills')
     api.add_namespace(skill_sessions_ns, path='/api/v1/skill-sessions')
     api.add_namespace(bookings_ns, path='/api/v1/bookings')
     api.add_namespace(reviews_ns, path='/api/v1/reviews')
+    api.add_namespace(auth_ns, path='/api/v1/auth')
 
     # Ensure database tables are created before the first request
     with app.app_context():

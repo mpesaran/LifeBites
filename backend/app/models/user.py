@@ -2,8 +2,9 @@
 
 import uuid
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_bcrypt import Bcrypt
+import jwt
 from app import db
 from sqlalchemy.orm import validates
 
@@ -119,6 +120,36 @@ class User(db.Model):
     #     if user:
     #         db.session.delete(user)
     #         db.session.commit()
+
+    @staticmethod
+    def email_exists(email):
+        """ Search through all Users to check the email exists """
+        # Unused - the facade method get_user_by_email will handle this
+
+    def generate_token(self):
+        """Generate JWT token for the user."""
+        from flask import current_app
+        payload = {
+            'user_id': self.id,
+            'email': self.email,
+            'is_instructor': self.is_instructor,
+            'is_admin': self.is_admin,
+            'exp': datetime.utcnow() + timedelta(seconds=current_app.config['JWT_ACCESS_TOKEN_EXPIRES']),
+            'iat': datetime.utcnow()
+        }
+        return jwt.encode(payload, current_app.config['JWT_SECRET_KEY'], algorithm='HS256')
+
+    @staticmethod
+    def verify_token(token):
+        """Verify JWT token and return user data."""
+        from flask import current_app
+        try:
+            payload = jwt.decode(token, current_app.config['JWT_SECRET_KEY'], algorithms=['HS256'])
+            return payload
+        except jwt.ExpiredSignatureError:
+            return None  # Token has expired
+        except jwt.InvalidTokenError:
+            return None  # Invalid token
 
     @staticmethod
     def email_exists(email):

@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from app.utils.jwt_auth import jwt_required
 
 api = Namespace('reviews', description='Review operations')
 
@@ -18,20 +19,20 @@ class ReviewList(Resource):
     @api.expect(review_model)
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data or validation failed')
+    @api.response(401, 'Authentication required')
     @api.response(404, 'User, session, instructor, or booking not found')
-    def post(self):
+    @jwt_required
+    def post(self, current_user):
         """Create a new review for a completed session"""
         review_data = api.payload
 
+        # Set user_id from authenticated user
+        review_data['user_id'] = current_user.id
+
         # Validate required fields
-        required_fields = ['text', 'rating', 'user_id', 'session_id', 'instructor_id', 'booking_id']
+        required_fields = ['text', 'rating', 'session_id', 'instructor_id', 'booking_id']
         if not all(field in review_data for field in required_fields):
             return {'error': 'Missing required fields'}, 400
-
-        # Validate that user exists
-        user = facade.get_user(review_data['user_id'])
-        if not user:
-            return {'error': 'User does not exist'}, 404
 
         # Validate that session exists
         session = facade.get_skill_session(review_data['session_id'])
